@@ -15,7 +15,7 @@ LIBOPT_DIR = ..
 
 
 CFLAGS = -Wall -Wextra -Werror -I. -I.. -I$(LIBOPT_DIR)/include -I$(LIBFT_DIR)/includes -I$(COMM_DIR) -g
-LDFLAGS = -L$(LIBFT_DIR) -lft -L$(LIBOPT_DIR) -lopt
+LDFLAGS = -L$(LIBFT_DIR) -lft -L$(LIBOPT_DIR) -lopt_d
 
 CC = gcc
 LD = $(CC)

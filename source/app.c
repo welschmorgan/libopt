@@ -6,7 +6,7 @@
 /*   By: mwelsch <mwelsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/23 17:14:43 by mwelsch           #+#    #+#             */
-/*   Updated: 2016/05/05 17:47:45 by mwelsch          ###   ########.fr       */
+/*   Updated: 2016/05/05 18:19:50 by mwelsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ int					parse_option_value(t_opt *opt, char const *arg)
 		init_option_value(&opt->value, OVF_STRING, mid);
 	else if (opt->value.flags & OVF_NUMBER)
 		init_option_value(&opt->value, OVF_NUMBER, ft_atoi(mid));
-	else
+	else if (opt->value.flags != OVF_NONE)
 		return (EXIT_FAILURE);
 	return (EXIT_SUCCESS);
 }
@@ -95,46 +95,63 @@ int					error_app(int code, char *msg)
 	return (code);
 }
 
+int					raise_app(char const *arg)
+{
+	t_opt			*opt;
+	char const		*pack;
+	char			trigger[3];
+
+	if (!arg)
+		return (EXIT_FAILURE);
+	ft_strncpy(trigger, "-v", 3);
+	opt = get_app_option(arg);
+	if (!opt)
+	{
+		pack = arg;
+		while (*pack && *pack == '-')
+			pack++;
+		while (*pack)
+		{
+			trigger[1] = *pack;
+			opt = get_app_option(trigger);
+			if (!opt)
+				return (EXIT_FAILURE);
+			if (!parse_option_value(opt, arg))
+				return (EXIT_FAILURE);
+			if (trigger_option(opt))
+				return (EXIT_FAILURE);
+			pack++;
+		}
+	}
+	else
+	{
+		if (!parse_option_value(opt, arg))
+			return (EXIT_FAILURE);
+		if (trigger_option(opt))
+			return (EXIT_FAILURE);
+	}
+	return (EXIT_SUCCESS);
+}
+
 int					config_app(int argc, char *argv[])
 {
 	int				i;
-	t_opt			*opt;
-	char			*pack;
 
 	i = 0;
 	while (i < argc && argv[i])
 	{
-		if (ft_strnstr(argv[i], "--", 2) || ft_strnstr(argv[i], "-", 1))
+		if (ft_strnstr(argv[i], "--", 2)
+			|| ft_strnstr(argv[i], "-", 1))
 		{
-			opt = get_app_option(argv[i]);
-			if (!opt)
-			{
-				pack = argv[i];
-				while (pack && *pack)
-				{
-					opt = get_app_option(argv[i]);
-					if (!opt)
-						return (EXIT_FAILURE);
-					if (!parse_option_value(opt, argv[i]))
-						return (EXIT_FAILURE);
-					if (trigger_option(opt))
-						return (EXIT_FAILURE);
-					pack++;
-				}
-			}
-			else
-			{
-				if (!parse_option_value(opt, argv[i]))
-					return (EXIT_FAILURE);
-				if (trigger_option(opt))
-					return (EXIT_FAILURE);
-			}
+			raise_app(argv[i]);
 		}
 		else
+		{
 			ft_dlist_push_back(g_libopt_app->params,
 							   ft_dnode_new(ft_strdup(argv[i]),
 											ft_strlen(argv[i]),
 											NF_DESTROY_ALL));
+		}
 		i++;
 	}
 	return (EXIT_FAILURE);
@@ -165,7 +182,7 @@ t_opt				*get_app_option(char const *name)
 			i = 0;
 			while (i < opt->num_names && opt->names[i])
 			{
-				if (ft_strnstr(name, opt->names[i], valpos))
+				if (!ft_strncmp(name, opt->names[i], valpos))
 					return (opt);
 				i++;
 			}

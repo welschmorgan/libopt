@@ -1,0 +1,6 @@
+libopt.a
+libopt_d.a
+object
+test/*/*.o
+test/*/*.log
+test/*/*.run

@@ -6,7 +6,7 @@
 /*   By: mwelsch <mwelsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/03/30 12:17:08 by mwelsch           #+#    #+#             */
-/*   Updated: 2016/04/24 12:45:34 by mwelsch          ###   ########.fr       */
+/*   Updated: 2016/05/05 17:50:48 by mwelsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,6 @@ int		test_opt_register_flag_v(t_opt *opt)
 	return (0);
 }
 
-typedef enum	e_app_flag
-{
-	FLAG_VERBOSE,
-	FLAG_HELP,
-	FLAG_COUNT
-}				t_app_flag;
 int		test_opt_register(t_test *test)
 {
 	t_opt_val	val;

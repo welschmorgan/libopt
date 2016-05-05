@@ -6,7 +6,7 @@
 /*   By: mwelsch <mwelsch@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/23 17:03:29 by mwelsch           #+#    #+#             */
-/*   Updated: 2016/04/24 11:58:22 by mwelsch          ###   ########.fr       */
+/*   Updated: 2016/05/05 17:55:33 by mwelsch          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ t_app				*init_app(char const *name,
 							  char const *version,
 							  char const *synopsis,
 							  char const *executable);
+
+int					raise_app(char const *arg);
 int					config_app(int argc, char *argv[]);
 t_app				*get_app();
 int					reset_app();
